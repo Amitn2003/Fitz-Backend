@@ -10,9 +10,9 @@ const userRoutes = require('./routes/user');
 const exerciseRoutes = require('./routes/exercise');
 const routineRoutes = require('./routes/routine');
 const workoutRoutes = require('./routes/workout');
+const progressRoutes = require('./routes/progress');
 
 const app = express();
-
 
 // Middleware
 app.use(express.json());
@@ -26,12 +26,35 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Root route
+app.get('/', (req, res) => {
+  res.send("{    message: 'Welcome to the Fitness App API',    version: '1.0.0',    documentation: '/api'  }");
+});
+
+// API information route
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'Fitness App API',
+    version: '1.0.0',
+    endpoints: [
+      { path: '/api/auth', description: 'Authentication routes' },
+      { path: '/api/users', description: 'User management routes' },
+      { path: '/api/exercises', description: 'Exercise management routes' },
+      { path: '/api/routines', description: 'Workout routine routes' },
+      { path: '/api/workouts', description: 'Workout logging routes' },
+      { path: '/api/progress', description: 'Progress tracking routes' }
+    ],
+    documentation: 'https://github.com/yourusername/fitness-app-backend/blob/main/API_DOCUMENTATION.md'
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/exercises', exerciseRoutes);
 app.use('/api/routines', routineRoutes);
 app.use('/api/workouts', workoutRoutes);
+app.use('/api/progress', progressRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -46,4 +69,3 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
