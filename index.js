@@ -16,9 +16,17 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
 app.use(helmet());
 
+// CORS middleware configuration
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
 
 
 app.set('trust proxy', 1); // Enable trusting the X-Forwarded-For header
