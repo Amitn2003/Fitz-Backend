@@ -19,6 +19,12 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 
+
+
+app.set('trust proxy', 1); // Enable trusting the X-Forwarded-For header
+
+
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -43,8 +49,7 @@ app.get('/api', (req, res) => {
       { path: '/api/routines', description: 'Workout routine routes' },
       { path: '/api/workouts', description: 'Workout logging routes' },
       { path: '/api/progress', description: 'Progress tracking routes' }
-    ],
-    documentation: 'https://github.com/yourusername/fitness-app-backend/blob/main/API_DOCUMENTATION.md'
+    ]
   });
 });
 
@@ -69,3 +74,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Export serverless function to Vercel
+module.exports = app;

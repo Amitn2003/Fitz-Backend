@@ -20,6 +20,7 @@
     "author": "Amit Naskar",
     "license": "ISC",
     "dependencies": {
+        "@vercel/node": "^3.2.26",
         "bcrypt": "^5.1.0",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
