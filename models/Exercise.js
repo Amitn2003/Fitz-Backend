@@ -7,6 +7,7 @@ const exerciseSchema = new mongoose.Schema({
   equipment: { type: String, required: true },
   workoutType: { type: String, required: true },
   difficulty: { type: String, required: true, enum: ['Beginner', 'Intermediate', 'Advanced'] },
+  weightType: { type: String, required: true, enum: ['bodyweight', 'external'] },
   youtubeLink: { type: String, default: 'none' },
   imageUrl: { type: String },
   caloriesBurnedPerMinute: { type: Number },

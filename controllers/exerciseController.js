@@ -8,6 +8,7 @@ const exerciseSchema = z.object({
   equipment: z.string().min(3),
   workoutType: z.string().min(3),
   difficulty: z.enum(['Beginner', 'Intermediate', 'Advanced']),
+  weightType: z.enum(['bodyweight', 'external']),
   youtubeLink: z.string().url().optional(),
   imageUrl: z.string().url().optional(),
   caloriesBurnedPerMinute: z.number().positive().optional(),
@@ -50,6 +51,9 @@ exports.getAllExercises = async (req, res) => {
     }
     if (req.query.equipment) {
       filter.equipment = req.query.equipment;
+    }
+    if (req.query.weightType) {
+      filter.weightType = req.query.weightType;
     }
 
     const exercises = await Exercise.find(filter).skip(skip).limit(limit).populate('createdBy', 'username');

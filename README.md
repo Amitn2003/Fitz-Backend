@@ -1,42 +1,27 @@
-# Fitness App API Documentation
+Fitness App API Documentation
 
-## Base URL
+Base URL: http://localhost:3000/api
 
-`http://localhost:3000/api`
+Authentication:
+All authenticated routes require a JWT token in the Authorization header:
+Authorization: Bearer <your_jwt_token>
 
-## Authentication
-
-All authenticated routes require a JWT token in the Authorization header.
-
-Header: `Authorization: Bearer <your_jwt_token>`
-
-## Error Responses
-
+Error Responses:
 All endpoints may return the following error responses:
-
 - 400 Bad Request: Invalid input data
 - 401 Unauthorized: Missing or invalid token
 - 403 Forbidden: Insufficient permissions
 - 404 Not Found: Resource not found
 - 500 Internal Server Error: Server error
 
+1. Authentication Routes
 
-## Authentication Routes
-
-### Register User
-
-- **URL**: `/auth/register`
-- **Method**: `POST`
-- **Headers**:
-
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+1.1 Register User
+URL: /auth/register
+Method: POST
+Headers:
+  - Content-Type: application/json
+Body:
 {
   "username": "johndoe",
   "email": "john@example.com",
@@ -50,70 +35,36 @@ All endpoints may return the following error responses:
   "fitnessLevel": "intermediate",
   "preferredWorkoutSplit": "push/pull/legs"
 }
-```
+Success Response:
+  - Code: 201
+  - Content: { "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
 
-- **Success Response**:
-
-- **Code**: 201
-- **Content**: `{ "token": "<jwt_token>" }`
-
-
-
-
-
-### Login User
-
-- **URL**: `/auth/login`
-- **Method**: `POST`
-- **Headers**:
-
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+1.2 Login User
+URL: /auth/login
+Method: POST
+Headers:
+  - Content-Type: application/json
+Body:
 {
   "email": "john@example.com",
   "password": "securepassword123"
 }
-```
+Success Response:
+  - Code: 200
+  - Content: { "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
 
-- **Success Response**:
+2. User Routes
 
-- **Code**: 200
-- **Content**: `{ "token": "<jwt_token>" }`
-
-
-
-
-
-## User Routes
-
-### Get User Profile
-
-- **URL**: `/users/profile`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**:
-
-
-
-
-
-```json
+2.1 Get User Profile
+URL: /users/profile
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content:
 {
-  "_id": "user_id",
+  "_id": "60a1b2c3d4e5f6g7h8i9j0k1",
   "username": "johndoe",
   "email": "john@example.com",
   "age": 30,
@@ -125,561 +76,512 @@ All endpoints may return the following error responses:
   "fitnessLevel": "intermediate",
   "preferredWorkoutSplit": "push/pull/legs"
 }
-```
 
-### Update User Profile
-
-- **URL**: `/users/profile`
-- **Method**: `PUT`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+2.2 Update User Profile
+URL: /users/profile
+Method: PUT
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
   "weight": 73,
   "fitnessLevel": "advanced"
 }
-```
+Success Response:
+  - Code: 200
+  - Content:
+{
+  "_id": "60a1b2c3d4e5f6g7h8i9j0k1",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "age": 30,
+  "gender": "male",
+  "height": 180,
+  "weight": 73,
+  "weightGoal": 70,
+  "mainGoal": "weight loss",
+  "fitnessLevel": "advanced",
+  "preferredWorkoutSplit": "push/pull/legs"
+}
 
-- **Success Response**:
+3. Exercise Routes
 
-- **Code**: 200
-- **Content**: Updated user object (similar to Get User Profile response)
-
-
-
-
-
-## Exercise Routes
-
-### Create Exercise (Admin only)
-
-- **URL**: `/exercises`
-- **Method**: `POST`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+3.1 Create Exercise (Admin only)
+URL: /exercises
+Method: POST
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
   "name": "Barbell Squat",
   "description": "A compound lower body exercise that targets the quadriceps, hamstrings, and glutes.",
-  "muscleGroup": "Legs",
-  "equipment": "Barbell"
+  "muscleGroup": ["Legs", "Core"],
+  "equipment": "Barbell",
+  "workoutType": "Strength",
+  "difficulty": "Intermediate",
+  "weightType": "external",
+  "youtubeLink": "https://www.youtube.com/watch?v=example",
+  "imageUrl": "https://example.com/barbell-squat.jpg",
+  "caloriesBurnedPerMinute": 8,
+  "instructions": [
+    "Stand with feet shoulder-width apart",
+    "Lower your body as if sitting back into a chair",
+    "Keep your chest up and back straight",
+    "Push through your heels to return to the starting position"
+  ],
+  "variations": ["Front Squat", "Goblet Squat"],
+  "tips": ["Keep your knees in line with your toes", "Breathe out as you push up"]
 }
-```
+Success Response:
+  - Code: 201
+  - Content:
+{
+  "_id": "60b2c3d4e5f6g7h8i9j0k1l2",
+  "name": "Barbell Squat",
+  "description": "A compound lower body exercise that targets the quadriceps, hamstrings, and glutes.",
+  "muscleGroup": ["Legs", "Core"],
+  "equipment": "Barbell",
+  "workoutType": "Strength",
+  "difficulty": "Intermediate",
+  "weightType": "external",
+  "youtubeLink": "https://www.youtube.com/watch?v=example",
+  "imageUrl": "https://example.com/barbell-squat.jpg",
+  "caloriesBurnedPerMinute": 8,
+  "instructions": [
+    "Stand with feet shoulder-width apart",
+    "Lower your body as if sitting back into a chair",
+    "Keep your chest up and back straight",
+    "Push through your heels to return to the starting position"
+  ],
+  "variations": ["Front Squat", "Goblet Squat"],
+  "tips": ["Keep your knees in line with your toes", "Breathe out as you push up"],
+  "createdBy": "60a1b2c3d4e5f6g7h8i9j0k1",
+  "isApproved": true,
+  "createdAt": "2023-05-20T10:30:00Z",
+  "updatedAt": "2023-05-20T10:30:00Z"
+}
 
-- **Success Response**:
-
-- **Code**: 201
-- **Content**: Created exercise object
-
-
-
-
-
-### Get All Exercises
-
-- **URL**: `/exercises`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Query Parameters**:
-
-- `page`: Page number (default: 1)
-- `limit`: Number of items per page (default: 10)
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**:
-
-
-
-
-
-```json
+3.2 Get All Exercises
+URL: /exercises
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Number of items per page (default: 10)
+  - muscleGroup: Filter by muscle group (optional)
+  - difficulty: Filter by difficulty (optional)
+  - equipment: Filter by equipment (optional)
+Success Response:
+  - Code: 200
+  - Content:
 {
   "exercises": [
     {
-      "_id": "exercise_id",
+      "_id": "60b2c3d4e5f6g7h8i9j0k1l2",
       "name": "Barbell Squat",
       "description": "A compound lower body exercise that targets the quadriceps, hamstrings, and glutes.",
-      "muscleGroup": "Legs",
-      "equipment": "Barbell"
+      "muscleGroup": ["Legs", "Core"],
+      "equipment": "Barbell",
+      "difficulty": "Intermediate",
+      "weightType": "external"
+    },
+    {
+      "_id": "60c3d4e5f6g7h8i9j0k1l2m3",
+      "name": "Push-up",
+      "description": "A bodyweight exercise that targets the chest, shoulders, and triceps.",
+      "muscleGroup": ["Chest", "Shoulders", "Arms"],
+      "equipment": "None",
+      "difficulty": "Beginner",
+      "weightType": "bodyweight"
     }
   ],
   "currentPage": 1,
   "totalPages": 5,
   "totalExercises": 50
 }
-```
 
-### Get Single Exercise
-
-- **URL**: `/exercises/:id`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: Single exercise object
-
-
-
-
-
-### Update Exercise (Admin only)
-
-- **URL**: `/exercises/:id`
-- **Method**: `PUT`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+3.3 Get Single Exercise
+URL: /exercises/:id
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content:
 {
-  "description": "Updated description for the exercise."
+  "_id": "60b2c3d4e5f6g7h8i9j0k1l2",
+  "name": "Barbell Squat",
+  "description": "A compound lower body exercise that targets the quadriceps, hamstrings, and glutes.",
+  "muscleGroup": ["Legs", "Core"],
+  "equipment": "Barbell",
+  "workoutType": "Strength",
+  "difficulty": "Intermediate",
+  "weightType": "external",
+  "youtubeLink": "https://www.youtube.com/watch?v=example",
+  "imageUrl": "https://example.com/barbell-squat.jpg",
+  "caloriesBurnedPerMinute": 8,
+  "instructions": [
+    "Stand with feet shoulder-width apart",
+    "Lower your body as if sitting back into a chair",
+    "Keep your chest up and back straight",
+    "Push through your heels to return to the starting position"
+  ],
+  "variations": ["Front Squat", "Goblet Squat"],
+  "tips": ["Keep your knees in line with your toes", "Breathe out as you push up"],
+  "createdBy": {
+    "_id": "60a1b2c3d4e5f6g7h8i9j0k1",
+    "username": "admin_user"
+  },
+  "isApproved": true,
+  "createdAt": "2023-05-20T10:30:00Z",
+  "updatedAt": "2023-05-20T10:30:00Z"
 }
-```
 
-- **Success Response**:
+3.4 Update Exercise (Admin only)
+URL: /exercises/:id
+Method: PUT
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
+{
+  "description": "An updated description for the barbell squat exercise.",
+  "difficulty": "Advanced",
+  "tips": [
+    "Keep your knees in line with your toes",
+    "Breathe out as you push up",
+    "Maintain a neutral spine throughout the movement"
+  ]
+}
+Success Response:
+  - Code: 200
+  - Content: Updated exercise object (similar to Get Single Exercise response)
 
-- **Code**: 200
-- **Content**: Updated exercise object
+3.5 Delete Exercise (Admin only)
+URL: /exercises/:id
+Method: DELETE
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content: { "message": "Exercise deleted successfully" }
 
+4. Routine Routes
 
-
-
-
-### Delete Exercise (Admin only)
-
-- **URL**: `/exercises/:id`
-- **Method**: `DELETE`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: `{ "message": "Exercise deleted successfully" }`
-
-
-
-
-
-## Routine Routes
-
-### Create Routine
-
-- **URL**: `/routines`
-- **Method**: `POST`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+4.1 Create Routine
+URL: /routines
+Method: POST
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
   "name": "Full Body Workout",
   "description": "A comprehensive full body workout routine",
   "exercises": [
     {
-      "exercise": "exercise_id_1",
+      "exercise": "60b2c3d4e5f6g7h8i9j0k1l2",
       "sets": 3,
-      "reps": 10
+      "reps": 10,
+      "restBetweenSets": 60
     },
     {
-      "exercise": "exercise_id_2",
-      "sets": 4,
-      "reps": 12
+      "exercise": "60c3d4e5f6g7h8i9j0k1l2m3",
+      "sets": 3,
+      "reps": 15,
+      "restBetweenSets": 45
     }
-  ]
+  ],
+  "difficulty": "Intermediate",
+  "estimatedDuration": 60,
+  "targetMuscleGroups": ["Legs", "Chest", "Back", "Arms", "Shoulders"],
+  "workoutType": "Strength",
+  "equipment": ["Barbell", "Dumbbells", "Bench"],
+  "tags": ["Full Body", "Strength Training"],
+  "isPublic": true
 }
-```
+Success Response:
+  - Code: 201
+  - Content:
+{
+  "_id": "60d4e5f6g7h8i9j0k1l2m3n4",
+  "name": "Full Body Workout",
+  "description": "A comprehensive full body workout routine",
+  "exercises": [
+    {
+      "exercise": {
+        "_id": "60b2c3d4e5f6g7h8i9j0k1l2",
+        "name": "Barbell Squat"
+      },
+      "sets": 3,
+      "reps": 10,
+      "restBetweenSets": 60
+    },
+    {
+      "exercise": {
+        "_id": "60c3d4e5f6g7h8i9j0k1l2m3",
+        "name": "Push-up"
+      },
+      "sets": 3,
+      "reps": 15,
+      "restBetweenSets": 45
+    }
+  ],
+  "difficulty": "Intermediate",
+  "estimatedDuration": 60,
+  "targetMuscleGroups": ["Legs", "Chest", "Back", "Arms", "Shoulders"],
+  "workoutType": "Strength",
+  "equipment": ["Barbell", "Dumbbells", "Bench"],
+  "tags": ["Full Body", "Strength Training"],
+  "isPublic": true,
+  "createdBy": "60a1b2c3d4e5f6g7h8i9j0k1",
+  "likes": 0,
+  "timesUsed": 0,
+  "createdAt": "2023-05-20T12:00:00Z",
+  "updatedAt": "2023-05-20T12:00:00Z"
+}
 
-- **Success Response**:
-
-- **Code**: 201
-- **Content**: Created routine object
-
-
-
-
-
-### Get All Routines
-
-- **URL**: `/routines`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Query Parameters**:
-
-- `page`: Page number (default: 1)
-- `limit`: Number of items per page (default: 10)
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**:
-
-
-
-
-
-```json
+4.2 Get All Routines
+URL: /routines
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Number of items per page (default: 10)
+  - difficulty: Filter by difficulty (optional)
+  - workoutType: Filter by workout type (optional)
+Success Response:
+  - Code: 200
+  - Content:
 {
   "routines": [
     {
-      "_id": "routine_id",
+      "_id": "60d4e5f6g7h8i9j0k1l2m3n4",
       "name": "Full Body Workout",
       "description": "A comprehensive full body workout routine",
-      "exercises": [
-        {
-          "exercise": {
-            "_id": "exercise_id_1",
-            "name": "Barbell Squat"
-          },
-          "sets": 3,
-          "reps": 10
-        },
-        {
-          "exercise": {
-            "_id": "exercise_id_2",
-            "name": "Bench Press"
-          },
-          "sets": 4,
-          "reps": 12
-        }
-      ],
-      "user": "user_id"
+      "difficulty": "Intermediate",
+      "estimatedDuration": 60,
+      "workoutType": "Strength",
+      "createdBy": {
+        "_id": "60a1b2c3d4e5f6g7h8i9j0k1",
+        "username": "johndoe"
+      },
+      "likes": 5,
+      "timesUsed": 10
     }
   ],
   "currentPage": 1,
   "totalPages": 3,
   "totalRoutines": 25
 }
-```
 
-### Get Single Routine
+4.3 Get Single Routine
+URL: /routines/:id
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content: Single routine object (similar to the routine object in Create Routine response)
 
-- **URL**: `/routines/:id`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: Single routine object (similar to the routine object in Get All Routines)
-
-
-
-
-
-### Update Routine
-
-- **URL**: `/routines/:id`
-- **Method**: `PUT`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+4.4 Update Routine
+URL: /routines/:id
+Method: PUT
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
-  "name": "Updated Full Body Workout",
+  "name": "Advanced Full Body Workout",
+  "difficulty": "Advanced",
   "exercises": [
     {
-      "exercise": "exercise_id_1",
+      "exercise": "60b2c3d4e5f6g7h8i9j0k1l2",
       "sets": 4,
-      "reps": 8
+      "reps": 8,
+      "restBetweenSets": 90
     },
     {
-      "exercise": "exercise_id_3",
-      "sets": 3,
-      "reps": 15
+      "exercise": "60c3d4e5f6g7h8i9j0k1l2m3",
+      "sets": 4,
+      "reps": 20,
+      "restBetweenSets": 60
     }
   ]
 }
-```
+Success Response:
+- Code: 200
+  - Content: Updated routine object (similar to Get Single Routine response)
 
-- **Success Response**:
+4.5 Delete Routine
+URL: /routines/:id
+Method: DELETE
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content: { "message": "Routine deleted successfully" }
 
-- **Code**: 200
-- **Content**: Updated routine object
+5. Workout Routes
 
-
-
-
-
-### Delete Routine
-
-- **URL**: `/routines/:id`
-- **Method**: `DELETE`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: `{ "message": "Routine deleted successfully" }`
-
-
-
-
-
-## Workout Routes
-
-### Log Workout
-
-- **URL**: `/workouts`
-- **Method**: `POST`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+5.1 Log Workout
+URL: /workouts
+Method: POST
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
-  "routine": "routine_id",
+  "routine": "60d4e5f6g7h8i9j0k1l2m3n4",
+  "duration": 65,
   "exercises": [
     {
-      "exercise": "exercise_id_1",
+      "exercise": "60b2c3d4e5f6g7h8i9j0k1l2",
       "sets": [
-        { "weight": 100, "reps": 10 },
-        { "weight": 100, "reps": 8 },
-        { "weight": 95, "reps": 8 }
+        { "weight": 100, "reps": 10, "restAfter": 90 },
+        { "weight": 100, "reps": 8, "restAfter": 90 },
+        { "weight": 95, "reps": 8, "restAfter": 90 }
       ]
     },
     {
-      "exercise": "exercise_id_2",
+      "exercise": "60c3d4e5f6g7h8i9j0k1l2m3",
       "sets": [
-        { "weight": 60, "reps": 12 },
-        { "weight": 60, "reps": 10 },
-        { "weight": 55, "reps": 10 }
+        { "reps": 15, "duration": 45, "restAfter": 60 },
+        { "reps": 12, "duration": 45, "restAfter": 60 },
+        { "reps": 10, "duration": 45, "restAfter": 60 }
       ]
     }
-  ]
+  ],
+  "notes": "Great workout today!",
+  "feelingRating": 4,
+  "location": "Home Gym",
+  "weather": "Sunny",
+  "photoUrl": "https://example.com/workout-selfie.jpg"
 }
-```
+Success Response:
+  - Code: 201
+  - Content:
+{
+  "_id": "60e5f6g7h8i9j0k1l2m3n4o5",
+  "user": "60a1b2c3d4e5f6g7h8i9j0k1",
+  "routine": {
+    "_id": "60d4e5f6g7h8i9j0k1l2m3n4",
+    "name": "Full Body Workout"
+  },
+  "duration": 65,
+  "exercises": [
+    {
+      "exercise": {
+        "_id": "60b2c3d4e5f6g7h8i9j0k1l2",
+        "name": "Barbell Squat",
+        "weightType": "external"
+      },
+      "sets": [
+        { "weight": 100, "reps": 10, "restAfter": 90 },
+        { "weight": 100, "reps": 8, "restAfter": 90 },
+        { "weight": 95, "reps": 8, "restAfter": 90 }
+      ]
+    },
+    {
+      "exercise": {
+        "_id": "60c3d4e5f6g7h8i9j0k1l2m3",
+        "name": "Push-up",
+        "weightType": "bodyweight"
+      },
+      "sets": [
+        { "reps": 15, "duration": 45, "restAfter": 60 },
+        { "reps": 12, "duration": 45, "restAfter": 60 },
+        { "reps": 10, "duration": 45, "restAfter": 60 }
+      ]
+    }
+  ],
+  "notes": "Great workout today!",
+  "feelingRating": 4,
+  "location": "Home Gym",
+  "weather": "Sunny",
+  "photoUrl": "https://example.com/workout-selfie.jpg",
+  "date": "2023-05-20T14:30:00Z",
+  "createdAt": "2023-05-20T14:30:00Z",
+  "updatedAt": "2023-05-20T14:30:00Z"
+}
 
-- **Success Response**:
-
-- **Code**: 201
-- **Content**: Created workout object
-
-
-
-
-
-### Get All Workouts
-
-- **URL**: `/workouts`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Query Parameters**:
-
-- `page`: Page number (default: 1)
-- `limit`: Number of items per page (default: 10)
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**:
-
-
-
-
-
-```json
+5.2 Get All Workouts
+URL: /workouts
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Number of items per page (default: 10)
+  - startDate: Filter by start date (YYYY-MM-DD)
+  - endDate: Filter by end date (YYYY-MM-DD)
+Success Response:
+  - Code: 200
+  - Content:
 {
   "workouts": [
     {
-      "_id": "workout_id",
-      "user": "user_id",
+      "_id": "60e5f6g7h8i9j0k1l2m3n4o5",
+      "user": "60a1b2c3d4e5f6g7h8i9j0k1",
       "routine": {
-        "_id": "routine_id",
+        "_id": "60d4e5f6g7h8i9j0k1l2m3n4",
         "name": "Full Body Workout"
       },
-      "date": "2023-05-20T10:30:00Z",
-      "exercises": [
-        {
-          "exercise": {
-            "_id": "exercise_id_1",
-            "name": "Barbell Squat"
-          },
-          "sets": [
-            { "weight": 100, "reps": 10 },
-            { "weight": 100, "reps": 8 },
-            { "weight": 95, "reps": 8 }
-          ]
-        },
-        {
-          "exercise": {
-            "_id": "exercise_id_2",
-            "name": "Bench Press"
-          },
-          "sets": [
-            { "weight": 60, "reps": 12 },
-            { "weight": 60, "reps": 10 },
-            { "weight": 55, "reps": 10 }
-          ]
-        }
-      ]
+      "duration": 65,
+      "date": "2023-05-20T14:30:00Z",
+      "feelingRating": 4
     }
   ],
   "currentPage": 1,
   "totalPages": 5,
   "totalWorkouts": 50
 }
-```
 
-### Get Single Workout
+5.3 Get Single Workout
+URL: /workouts/:id
+Method: GET
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content: Single workout object (similar to the workout object in Log Workout response)
 
-- **URL**: `/workouts/:id`
-- **Method**: `GET`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: Single workout object (similar to the workout object in Get All Workouts)
-
-
-
-
-
-### Update Workout
-
-- **URL**: `/workouts/:id`
-- **Method**: `PUT`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-- `Content-Type: application/json`
-
-
-
-- **Body**:
-
-
-```json
+5.4 Update Workout
+URL: /workouts/:id
+Method: PUT
+Headers:
+  - Authorization: Bearer <jwt_token>
+  - Content-Type: application/json
+Body:
 {
+  "duration": 70,
   "exercises": [
     {
-      "exercise": "exercise_id_1",
+      "exercise": "60b2c3d4e5f6g7h8i9j0k1l2",
       "sets": [
-        { "weight": 105, "reps": 10 },
-        { "weight": 105, "reps": 8 },
-        { "weight": 100, "reps": 8 }
+        { "weight": 105, "reps": 8, "restAfter": 90 },
+        { "weight": 105, "reps": 7, "restAfter": 90 },
+        { "weight": 100, "reps": 7, "restAfter": 90 }
       ]
     }
-  ]
+  ],
+  "notes": "Increased weight on squats, feeling stronger!",
+  "feelingRating": 5
 }
-```
+Success Response:
+  - Code: 200
+  - Content: Updated workout object (similar to Get Single Workout response)
 
-- **Success Response**:
+5.5 Delete Workout
+URL: /workouts/:id
+Method: DELETE
+Headers:
+  - Authorization: Bearer <jwt_token>
+Success Response:
+  - Code: 200
+  - Content: { "message": "Workout deleted successfully" }
 
-- **Code**: 200
-- **Content**: Updated workout object
-
-
-
-
-
-### Delete Workout
-
-- **URL**: `/workouts/:id`
-- **Method**: `DELETE`
-- **Headers**:
-
-- `Authorization: Bearer <jwt_token>`
-
-
-
-- **Success Response**:
-
-- **Code**: 200
-- **Content**: `{ "message": "Workout deleted successfully" }`
-
-
-
-
-
-This API documentation covers all the endpoints we've implemented in the Fitness app backend. You can use these examples to test the API and make any necessary modifications. Remember to replace placeholders like `<jwt_token>`, `exercise_id`, `routine_id`, and `workout_id` with actual values when making requests.
-
-To test these endpoints, you can use tools like Postman or curl. Make sure to set up your environment variables (like the JWT token) for easier testing across multiple requests.
-
-Is there anything specific you'd like me to explain further or any modifications you'd like to make to the API?
