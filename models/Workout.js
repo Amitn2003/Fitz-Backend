@@ -8,10 +8,10 @@ const workoutSchema = new mongoose.Schema({
   exercises: [{
     exercise: { type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' },
     sets: [{
-      weight: { type: Number, required: true },
+      weight: { type: Number },
       reps: { type: Number, required: true },
       duration: { type: Number }, // in seconds, for timed exercises
-      restAfter: { type: Number, required: true } // in seconds
+      restAfter: { type: Number } // in seconds
     }],
   }],
   notes: { type: String },

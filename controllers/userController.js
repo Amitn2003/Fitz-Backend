@@ -22,7 +22,11 @@ exports.getUserProfile = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
   try {
+    if (req.body.age) {
+      req.body.age = parseInt(req.body.age, 10); // Convert age from string to integer
+    }
     const validatedData = updateProfileSchema.parse(req.body);
+    console.log(validatedData)
     const user = await User.findByIdAndUpdate(req.user.userId, validatedData, { new: true }).select('-password');
     res.json(user);
   } catch (error) {

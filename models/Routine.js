@@ -8,10 +8,10 @@ const routineSchema = new mongoose.Schema({
     sets: { type: Number, required: true },
     reps: { type: Number, required: true },
     duration: { type: Number }, // in seconds, for timed exercises
-    restBetweenSets: { type: Number, required: true } // in seconds
+    restBetweenSets: { type: Number, default : 30 } // in seconds
    }],
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   difficulty: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'] },
   estimatedDuration: { type: Number }, // in minutes
   targetMuscleGroups: { type: [String]},

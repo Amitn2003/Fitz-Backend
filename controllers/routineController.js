@@ -3,7 +3,7 @@ const { z } = require('zod');
 
 const routineSchema = z.object({
   name: z.string().min(3).max(100),
-  description: z.string().min(10),
+  description: z.string().min(3),
   exercises: z.array(z.object({
     exercise: z.string(),
     sets: z.number().int().positive(),
@@ -14,13 +14,16 @@ const routineSchema = z.object({
 exports.createRoutine = async (req, res) => {
   try {
     const validatedData = routineSchema.parse(req.body);
+    console.log(validatedData)
     const routine = new Routine({
       ...validatedData,
       user: req.user.userId,
     });
+    console.log(routine)
     await routine.save();
     res.status(201).json(routine);
   } catch (error) {
+    console.log(error)
     if (error instanceof z.ZodError) {
       res.status(400).json({ message: error.errors });
     } else {
