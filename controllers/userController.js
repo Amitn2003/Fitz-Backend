@@ -13,6 +13,7 @@ const updateProfileSchema = z.object({
 
 exports.getUserProfile = async (req, res) => {
   try {
+    console.log(user)
     const user = await User.findById(req.user.userId).select('-password');
     res.json(user);
   } catch (error) {
@@ -21,14 +22,23 @@ exports.getUserProfile = async (req, res) => {
 };
 
 exports.updateUserProfile = async (req, res) => {
+  console.log(req.body)
   try {
+    if (req.body.height && typeof req.body.height === 'string') {
+      req.body.height = parseFloat(req.body.height);
+    }
+    
+    if (req.body.weight && typeof req.body.weight === 'string') {
+      req.body.weight = parseFloat(req.body.weight);
+    }
     if (req.body.age) {
       req.body.age = parseInt(req.body.age, 10); // Convert age from string to integer
     }
     const validatedData = updateProfileSchema.parse(req.body);
-    console.log(validatedData)
+    console.log(validatedData, "Validated")
     const user = await User.findByIdAndUpdate(req.user.userId, validatedData, { new: true }).select('-password');
-    res.json(user);
+    console.log(user, validatedData, "last")
+    res.json(validatedData);
   } catch (error) {
     if (error instanceof z.ZodError) {
       res.status(400).json({ message: error.errors });

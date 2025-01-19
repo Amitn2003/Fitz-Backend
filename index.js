@@ -11,6 +11,7 @@ const exerciseRoutes = require('./routes/exercise');
 const routineRoutes = require('./routes/routine');
 const workoutRoutes = require('./routes/workout');
 const progressRoutes = require('./routes/progress');
+const analyticsRoutes = require('./routes/analytics');
 dotenv.config();
 const app = express();
 
@@ -19,24 +20,33 @@ app.use(express.json());
 app.use(helmet());
 
 // CORS middleware configuration
-app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+// app.use(cors({
+//   origin: '*', // Allow all origins
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true,
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204
+// }));
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://fitz-backend.vercel.app"], 
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
-}));
+};
+
+app.use(cors(corsOptions));
 
 
-app.set('trust proxy', 1); // Enable trusting the X-Forwarded-For header
+// app.set('trust proxy', 1); // Enable trusting the X-Forwarded-For header
 
 
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 1000 // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
 
@@ -68,6 +78,7 @@ app.use('/api/exercises', exerciseRoutes);
 app.use('/api/routines', routineRoutes);
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -20,8 +20,11 @@ const registerSchema = z.object({
 exports.registerUser = async (req, res) => {
   try {
     const validatedData = registerSchema.parse(req.body);
+    console.log(validatedData, "Validate user")
     const user = new User(validatedData);
+    console.log(user, "0User")
     await user.save();
+    console.log(user, "User")
     
     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);
     
@@ -34,6 +37,7 @@ exports.registerUser = async (req, res) => {
     if (error instanceof z.ZodError) {
       res.status(400).json({ message: error.errors });
     } else {
+      console.log(error)
       res.status(500).json({ message: 'Error registering user' });
     }
   }

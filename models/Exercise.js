@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const exerciseSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },  
-  muscleGroup: { type: [String], required: true },
+  muscleGroup: { type: [String] },
   equipment: { type: String, required: true },
   workoutType: { type: String, required: true },
   difficulty: { type: String, required: true, enum: ['Beginner', 'Intermediate', 'Advanced'] },
